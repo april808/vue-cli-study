@@ -1,9 +1,23 @@
 <template>
   <div class="home">
-    <Swiper/>
-    <HelloWorld :sctionTitle="title" sectionBg="grayGreen"/>
-    <HelloWorld sctionTitle="sction 2" sectionBg="gray"/>
-    <HelloWorld sctionTitle="sction 3" sectionBg="red"/>
+    <Spin />
+    <button @click="fetchProduct">get</button>
+
+    {{ productData }}
+    <br>
+    <hr>
+    <div v-for="(item, key) in productData" :key="key">
+
+      {{ item.id }}
+    <br>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <Swiper />
+    <HelloWorld :sctionTitle="title" sectionBg="grayGreen" />
+    <HelloWorld sctionTitle="sction 2" sectionBg="gray" />
+    <HelloWorld sctionTitle="sction 3" sectionBg="red" />
   </div>
 </template>
 
@@ -17,9 +31,20 @@ export default {
     HelloWorld,
     Swiper
   },
-  data(){
+  data() {
     return {
-       title: '😮‍💨這禮拜一直加班😮‍💨'
+      productData: []
+    }
+  },
+  methods: {
+    fetchProduct() {
+      console.log(1)
+      // fetch('https://fakestoreapi.com/carts')
+      fetch('./data/cartsData.json')
+        .then(res => res.json())
+        .then(json => {
+          this.productData = json
+        })
     }
   }
 }

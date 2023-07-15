@@ -1,12 +1,14 @@
 <template>
   <div class="sidebar" :class="{active: sidebarOpen}">
     <button @click="closeSidebar">X</button>
-    <div class="sidebar_content">
-      <h6>購物車</h6>
-      <div>
-        
-      </div>
-    </div>
+<div>
+  <slot name="slotheader">
+    ===========
+  </slot>
+  <slot name="slotfooter">
+    ===========
+  </slot>
+</div>
   </div>
 </template>
 
