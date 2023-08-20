@@ -4,6 +4,7 @@
     <Button type="primary" @click="modal = true">
       {{ sctionTitle }}
     </Button>
+
     <Modal
       v-model="modal"
       title="Common Modal dialog box title"
@@ -18,10 +19,11 @@
 
 <script>
 export default {
-  props: {
-    sctionTitle: String,
-    sectionBg: String
-  },
+  props: ['sctionTitle', 'sectionBg'],
+  // props: {
+  //   sctionTitle: String,
+  //   sectionBg: String
+  // },
   data () {
     return {
         modal: false
@@ -29,7 +31,7 @@ export default {
   },
   methods: {
     ok () {
-        this.$Message.info('Clicked ok');
+        this.$Message.info('Clicked ok' + this.sctionTitle);
     },
     cancel () {
         this.$Message.info('Clicked cancel');

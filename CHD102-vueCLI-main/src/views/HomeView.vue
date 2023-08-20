@@ -1,51 +1,49 @@
 <template>
-  <div class="home">
-    <Spin />
-    <button @click="fetchProduct">get</button>
-
-    {{ productData }}
-    <br>
-    <hr>
-    <div v-for="(item, key) in productData" :key="key">
-
-      {{ item.id }}
-    <br>
-    </div>
-    <br>
-    <hr>
-    <br>
-    <Swiper />
-    <HelloWorld :sctionTitle="title" sectionBg="grayGreen" />
-    <HelloWorld sctionTitle="sction 2" sectionBg="gray" />
-    <HelloWorld sctionTitle="sction 3" sectionBg="red" />
+  <Options />
+  <hr>
+  <Compositoin />
+  <div>
+    <h6>取得PHP所回應的資料</h6>
+    {{ cgd103Data }}
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-import Swiper from '@/components/Swiper.vue'
-
+import axios from 'axios'
+//引入component
+import Options from '@/components/Options.vue'
+import Compositoin from '@/components/Compositoin.vue'
 export default {
   components: {
-    HelloWorld,
-    Swiper
+    //註冊component
+    Options,
+    Compositoin
   },
-  data() {
+  data(){
     return {
-      productData: []
+      cgd103Data: {}
     }
   },
   methods: {
-    fetchProduct() {
-      console.log(1)
-      // fetch('https://fakestoreapi.com/carts')
-      fetch('./data/cartsData.json')
-        .then(res => res.json())
-        .then(json => {
-          this.productData = json
-        })
+    fetchcgd103(){
+      axios.get('/fake/cgg.json').then(res=>{
+      // axios.get('https://tibamef2e.com/cgd103/g2/front/phpfile/mainproduct.php').then(res=>{
+        this.cgd103Data= res.data
+      }).catch((error) => { // handle error
+          console.error(error.message);
+      })
     }
-  }
+  },
+  created() {
+    // Vue data那些東西掛好了
+    // console.log('created');
+    // console.log(document.getElementById('map'));
+    this.fetchcgd103()
+  },
+  mounted() {
+    // Vue已經掛在DOM中
+    // console.log('mounted');
+    // console.log(document.getElementById('map'));
+  },
 }
 </script>

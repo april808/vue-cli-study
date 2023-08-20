@@ -1,10 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 // import AboutView from '@/views/AboutView.vue'
-import User from '@/views/User/UserIndex.vue'
-// import UserHome from '@/views/User/UserHome.vue'
-// import UserProfile from '@/views/User/UserProfile.vue'
-// import UserPosts from '@/views/User/UserPosts.vue'
 
 const routesUser = [
   {
@@ -21,45 +17,62 @@ const routesUser = [
   {
     path: '/products',
     name: 'products',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/ProductView.vue')
+    component: () => import(/* webpackChunkName: "products" */ '@/views/ProductView.vue')
   },
   {
     path: '/productDetail/:id',
     name: 'productDetail',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/ProductDetailView.vue')
+    component: () => import(/* webpackChunkName: "productDetail" */ '@/views/ProductDetailView.vue')
   },
   {
-    path: '/user/:username',
-    // component: AboutView
-    component: () => import(/* webpackChunkName: "about" */ '@/views/User/UserIndex.vue'),
-    children: [
-			{ 
-				// /user/:username
-				path: '', 
-				component: UserHome
-			},
-      {
-        // /user/:username/profile
-        path: 'profile',
-        component: UserProfile,
-      },
-      {
-        // /user/:username/posts
-        path: 'posts',
-        component: UserPosts,
-      },
-    ],
+    path: '/productModify/:id',
+    name: 'ProductModify',
+    component: () => import(/* webpackChunkName: "ProductModify" */ '@/views/ProductModifyView.vue')
   },
   {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/LoginView.vue')
-  }
+  },
+  {
+    path: '/weather',
+    name: 'weather',
+    component: () => import(/* webpackChunkName: "weather" */ '@/views/WeatherView.vue')
+  },
+  {
+    path: '/weatherMap',
+    name: 'weatherMap',
+    component: () => import(/* webpackChunkName: "weatherMap" */ '@/views/WeatherMapView.vue')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('@/views/User/UserIndex.vue'),
+    children: [
+      // {
+      //   path: '',
+      //   component: () => import('@/views/User/UserLink.vue'),
+      // },
+      // {
+      //   path: '/user/info',
+      //   component: () => import('@/views/User/UserInfo.vue'),
+      // },
+      // {
+      //   path: '/user/order',
+      //   component: () => import('@/views/User/UserOrder.vue'),
+      // }
+    ]
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes: routesUser
+  routes: routesUser,
+  scrollBehavior (to, from, savedPosition) {
+    // return 期望滚动到哪个的位置
+		// 始终滚动到顶部
+    return { top: 0 }
+  }
 })
 
 export default router

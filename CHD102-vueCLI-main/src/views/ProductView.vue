@@ -4,27 +4,32 @@
       <input type="text" v-model="searchText">
       <button @click="updateDisplay">search</button>
     </aside>
-    <main v-if="productData.length > 0" class="product_list">
-      <router-link 
-        v-for="item in productDisplay" 
-        :key="item.id"
-        class="product_card"
-        :to="`/productDetail/${item.id}`"
-      >
-        <div class="product_img">
-          <img :src="item.image" alt="">
-        </div>
-        <p>{{ item.title }}</p>
-        <p class="right">${{ item.price }}</p>
-      </router-link>
+    <main >
+      <div v-if="productDisplay.length > 0" class="product_list">
+        <router-link 
+          v-for="item in productDisplay" 
+          :key="item.id"
+          class="product_card"
+          :to="`/productDetail/${item.id}`"
+        >
+          <div class="product_img">
+            <img :src="item.image" alt="">
+          </div>
+          <p>{{ item.title }}</p>
+          <p class="right">${{ item.price }}</p>
+        </router-link>
+      </div>
+      <div v-else class="nodata">
+        <p>沒有資料</p>
+        <button @click="resetData">重新取得商品</button>
+      </div>
     </main>
-    <main v-else>
-      Loading...
-    </main>
+    <Spin size="large" fix :show="loading"></Spin>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data(){
     return {
@@ -33,18 +38,11 @@ export default {
       productData: [],
       // 呈現的商品資料(針對productData來搜尋篩選)
       productDisplay: [],
+      loading: false
     }
   },
   created() {
-    // 取得API
-    // https://fakestoreapi.com/
-    // json-generator太難用了道歉ＴＴ
-    fetch('https://fakestoreapi.com/products')
-    .then(res=>res.json())
-    .then(json=>{
-      this.productData = json
-      this.updateDisplay()
-    })
+    this.fetchProduct()
   },
   methods: {
     updateDisplay(){
@@ -53,7 +51,38 @@ export default {
       }else{
         this.productDisplay = this.productData.filter(item => item.title.includes(this.searchText))
       }
-    }
+    },
+    resetData(){
+      this.searchText = ''
+      this.updateDisplay()
+    },
+    fetchProduct(){
+      this.loading = true
+
+      // 1. 用fetch
+      // https://fakestoreapi.com/
+      // fetch('https://fakestoreapi.com/products')
+      // .then(res=>res.json())
+      // .then(json=>{
+      //   this.productData = json
+      //   this.updateDisplay()
+      //   this.loading = false
+      // })
+      
+      // 2. 用axios
+      //axios.get('/fake/products.json')
+      axios.get('https://fakestoreapi.com/products')
+      .then((response) => { // handle success
+        this.productData = response.data? response.data: []
+      })
+      .catch((error) => { // handle error
+        console.error(error.message);
+      })
+      .finally(() => { // always executed
+        this.loading = false
+        this.updateDisplay()
+      })
+    },
   },
 }
 </script>
@@ -62,6 +91,8 @@ export default {
 .product{
   &_container{
     display: inline-flex;
+    width: 100%;
+    min-height: calc(100vh - 5rem);
     >aside{
       flex-basis: 10rem;
       background-color: rgb(175, 197, 197);
@@ -72,10 +103,8 @@ export default {
     }
   }
   &_list{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
+    display: inline-flex;
+    flex-wrap: wrap;
     padding: 1rem;
   }
   &_card{
@@ -83,6 +112,7 @@ export default {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
+    margin: 0.25rem;
     p{
       width: 15rem;
       height: 1em;
@@ -107,8 +137,18 @@ export default {
     justify-content: center;
 
     img{
-      width: 60%;
+      width: 50%;
+      object-fit: contain;
+      height: auto;
     }
   }
+}
+.nodata{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #dff2ea;
+  height: 100%;
 }
 </style>

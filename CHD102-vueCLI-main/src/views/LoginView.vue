@@ -21,9 +21,9 @@ export default {
     //記得還要判斷密碼～自己寫
     login(){
       if(this.email === 'test'){
-        alert('登入成功')
+        this.$store.commit('setName', this.email )
+        this.$router.push('/')
       }else{
-        alert('錯囉')
         this.email = ''
         this.psw = ''
       }

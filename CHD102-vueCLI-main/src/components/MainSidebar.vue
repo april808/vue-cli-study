@@ -1,14 +1,11 @@
 <template>
   <div class="sidebar" :class="{active: sidebarOpen}">
     <button @click="closeSidebar">X</button>
-<div>
-  <slot name="slotheader">
-    ===========
-  </slot>
-  <slot name="slotfooter">
-    ===========
-  </slot>
-</div>
+    <div>
+      <slot name="slotheader"></slot>
+      ==========
+      <slot name="slotfooter"></slot>
+    </div>
   </div>
 </template>
 
@@ -19,10 +16,9 @@ export default {
     sidebarOpen: Boolean
   },
   methods: {
-    //點擊button觸發的event
     closeSidebar(){
+      console.log('子層close');
       // emit: 觸發父層的function或js
-      // 這個還沒教
       this.$emit('close')
     }
   }
